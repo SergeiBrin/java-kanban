@@ -139,8 +139,8 @@ public class Manager {
     }
 
     public String deleteTaskById(int removeTask) { // Удаление задачи по идентификатору. Метод один для всех задач.
-        for (int keyTask : tasks.keySet()) {       // Возможно тут будет лучше с void. Просто подумал, что хочу как-то
-            if (removeTask == keyTask) {           // оповестить пользователя на той стороне силы :)
+        for (int keyTask : tasks.keySet()) {
+            if (removeTask == keyTask) {
                 tasks.remove(keyTask);
                 return "Задача с идентификатором " + keyTask + " удалена.";
             }
