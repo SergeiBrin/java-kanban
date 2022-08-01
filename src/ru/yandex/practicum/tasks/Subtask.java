@@ -1,3 +1,5 @@
+package ru.yandex.practicum.tasks;
+
 public class Subtask extends Epic {
     private int epicIdForSubtask;
 
@@ -15,11 +17,12 @@ public class Subtask extends Epic {
 
     @Override
     public String toString() {
-        return "Subtask{" +
+        return "Tasks.Subtask{" +
                 "id=" + getId() +
                 ", status='" + getStatus() + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                '}' + "\n";
+                ", epicIdForSubtask=[" + epicIdForSubtask +"]" +
+                '}';
     }
 }
