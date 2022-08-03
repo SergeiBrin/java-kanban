@@ -24,6 +24,9 @@ public class Main {
     private static void testProgram(TaskManager manager) {
         Task task = new Task("Переезд", "Денег болт, поэтому поеду в Чехию цыганом", "NEW");
         Task task1 = new Task("Купить машину", "Хотя бы Жигули", "NEW");
+        Task task2 = null;
+        
+        manager.updateTask(task2);
 
         Epic epic = new Epic("Найти время, чтоб отдохнуть", "Совсем ничего не делать", "NEW");
         Subtask subtask = new Subtask("Лечь на кровать", "Аккуратно, чтоб не прихватило спину", "NEW");
