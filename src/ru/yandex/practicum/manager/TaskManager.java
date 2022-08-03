@@ -1,4 +1,4 @@
-package ru.yandex.practicum.logic;
+package ru.yandex.practicum.manager;
 
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Task;
@@ -180,77 +180,90 @@ public class TaskManager {
     }
 
     public void updateTask(Task newTask) { // Обновление простых задач и их статусов.
-        boolean isTrue = checkTaskForNullOrEmpty(newTask);
-        if (isTrue) {
-            for (int keyTask : tasks.keySet()) {
-                if (newTask.getId() == keyTask) {
-                    tasks.put(keyTask, newTask);
-                }
-            }
+        boolean isNotNull = checkTaskForNullOrEmpty(newTask); // Проверка на Null
+        boolean isTaskIdTrue = tasks.containsKey(newTask.getId()); // Проверка на соответствие ключей простой задачи.
+
+        if (isNotNull || isTaskIdTrue) {
+            tasks.put(newTask.getId(), newTask);
+        } else {
+            System.out.println("Не получилось сделать апдейт простой задачи. Для того, чтобы сделать апдейт – " +
+                    "передайте простую задачу с правильным Id");
         }
     }
 
     /* Тут кроме апдейта Епик в Map происходит проверка эпиков на наличие у них подзадач.
-    Если окажется, что у какого-то из эпиков их нет, например, потому что их удалили через метод
-    Tasks.Task getTaskById(int idTask), то статус Эпика должен измениться на NEW,
+    Если окажется, что у какого-то из эпиков их нет, например, потому что их полностью удалили через метод
+    deleteSubtaskById(int removeSubtask), то статус Эпика должен измениться на NEW,
     так как по условию задачи Эпик без подзадач - это NEW */
     public void updateEpic(Epic newEpic) { // Обновление Эпик-задач и их статусов.
-        boolean isTrue = checkTaskForNullOrEmpty(newEpic);
+        boolean isNotNull = checkTaskForNullOrEmpty(newEpic); // Проверка на Null.
+        boolean isEpicIdTrue = epics.containsKey(newEpic.getId()); // Проверка на соответствие ключей Эпик-задачи.
 
-        if (isTrue) {
-            for (int keyEpic : epics.keySet()) {
-                if (newEpic.getId() == keyEpic) {
-                    epics.put(keyEpic, newEpic);
-                }
-                boolean isEmpty = epics.get(keyEpic).getSubtaskIdForEpic().isEmpty();
-                if (isEmpty) {
+        if (isNotNull && isEpicIdTrue) {
+            epics.put(newEpic.getId(), newEpic);
+            updateEpicWithSubtask(newEpic.getId());
+
+            for (int keyEpic : epics.keySet()) { // Проверка Эпиков на наличие подзадач. Если их нет, то Эпик – NEW.
+                boolean isSubtaskForEpicEmpty = epics.get(keyEpic).getSubtaskIdForEpic().isEmpty();
+                if (isSubtaskForEpicEmpty) {
                     epics.get(keyEpic).setStatus("NEW");
                 }
             }
-            updateEpicWithSubtask();
+        } else {
+            System.out.println("Не получилось сделать апдейт эпик-задачи. Для того, чтобы сделать апдейт – " +
+                    "передайте эпик-задачу с правильным Id");
         }
     }
 
     public void updateSubtask(Subtask newSubtask) { // Обновление подзадач и их статусов.
-        boolean isTrue = checkTaskForNullOrEmpty(newSubtask);
+        boolean isNotNull = checkTaskForNullOrEmpty(newSubtask); // Проверка на Null.
+        boolean isSubtaskKeyTrue = subTasks.containsKey(newSubtask.getId()); // Проверка на соответствие ключей подзадачи.
 
-        if (isTrue) {
-            for (int keySt : subTasks.keySet()) {
-                if (newSubtask.getId() == keySt) {
-                    subTasks.put(keySt, newSubtask);
-                }
-            }
-            updateEpicWithSubtask();
+        if (isNotNull && isSubtaskKeyTrue) {
+            subTasks.put(newSubtask.getId(), newSubtask);
+            updateEpicWithSubtask(newSubtask.getId());
+        } else {
+            System.out.println("Не получилось сделать апдейт подзадачи. Для того, чтобы сделать апдейт – " +
+                    "передайте подзадачу с правильным Id");
         }
     }
 
     /* Это метод, в котором проверяются статусы подзадач – для решения о статусе Эпика,
-       связанного с этими подзадачами. Вызывается из updateEpic и из updateSubtask. Сделал так
-       для того, чтобы обновление Епика к подзадачам менялось как при обновлении Эпика, так и при обновлении
+       связанного с этими подзадачами. В метод передаётся Id эпика иди подзадачи.
+
+       Вызывается из updateEpic и из updateSubtask. Сделал так для того, чтобы обновление
+       Епика к подзадачам менялось как при обновлении Эпика, так и при обновлении
        подзадачи. */
-    private void updateEpicWithSubtask() {
-        for (int keySt : subTasks.keySet()) {
-            int epicId = subTasks.get(keySt).getEpicIdForSubtask();
+    private void updateEpicWithSubtask(int idNumber) {
+        int epicId = 0;
 
-            ArrayList<Integer> subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
-            ArrayList<String> subtaskStatus = new ArrayList<>();
+        if (epics.containsKey(idNumber)) { // Проверка на то, что передан Id епик-задачи
+            epicId = idNumber;
+        }
 
-            for (int keyStForEpic : subtaskIdForEpic) {
-                subtaskStatus.add(subTasks.get(keyStForEpic).getStatus());
-            }
+        if (subTasks.containsKey(idNumber)) { // Проверка на то, что передан Id подзадачи.
+            epicId = subTasks.get(idNumber).getEpicIdForSubtask();
+        }
 
-            if ((subtaskStatus.contains("NEW")) && (subtaskStatus.contains("DONE"))) {
-                epics.get(epicId).setStatus("IN_PROGRESS");
-            } else if (subtaskStatus.contains("DONE")) {
-                epics.get(epicId).setStatus("DONE");
-            } else {
-                epics.get(epicId).setStatus("NEW");
-            }
+        ArrayList<Integer> subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
+        ArrayList<String> subtaskStatus = new ArrayList<>();
+
+        for (int subTaskId : subtaskIdForEpic) {
+            subtaskStatus.add(subTasks.get(subTaskId).getStatus());
+        }
+
+        if ((subtaskStatus.contains("NEW")) && (subtaskStatus.contains("DONE"))) {
+            epics.get(epicId).setStatus("IN_PROGRESS");
+        } else if (subtaskStatus.contains("DONE")) {
+            epics.get(epicId).setStatus("DONE");
+        } else {
+            epics.get(epicId).setStatus("NEW");
         }
     }
 
+
     private boolean checkTaskForNullOrEmpty(Task task) {
-        return (task != null) && (task.getId() != 0);
+        return (task != null);
     }
 }
 
