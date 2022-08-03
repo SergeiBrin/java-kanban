@@ -261,7 +261,6 @@ public class TaskManager {
         }
     }
 
-
     private boolean checkTaskForNullOrEmpty(Task task) {
         return (task != null);
     }
