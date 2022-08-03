@@ -223,8 +223,8 @@ public class TaskManager {
         boolean isNotNull = checkTaskForNull(newSubtask); // Проверка на Null.
 
         if (isNotNull) {
-            boolean isSubtaskKeyTrue = subTasks.containsKey(newSubtask.getId()); // Проверка на соответствие ключей подзадачи.
-            if (isSubtaskKeyTrue) {
+            boolean isSubtaskIdTrue = subTasks.containsKey(newSubtask.getId()); // Проверка на соответствие ключей подзадачи.
+            if (isSubtaskIdTrue) {
                 subTasks.put(newSubtask.getId(), newSubtask);
                 updateEpicWithSubtask(newSubtask.getId());
             }
