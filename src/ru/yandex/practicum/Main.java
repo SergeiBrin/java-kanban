@@ -1,6 +1,6 @@
 package ru.yandex.practicum;
 
-import ru.yandex.practicum.logic.TaskManager;
+import ru.yandex.practicum.manager.TaskManager;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
@@ -12,22 +12,17 @@ public class Main {
         TaskManager manager = new TaskManager();
         testProgram(manager);
 
-        /* Почти все замечания исправил, кроме рекомендации по entrySet() и рефакторингу метода
-        updateEpicWithSubtask() с добавлением параметра int – тут я просто не понимаю, что мне нужно сделать – это
-        плохая новость. Но вероятно я пойму это чуть позже, когда наберусь новых знаний – это хорошая новость :)
+        /* Все замечания устранил, но для этого пришлось переработать все методы update...();
+        Теперь эпики обновляются по Id эпика или подзадачи. Но для того, чтобы апдейт случился,
+        необходимо передать в один из методов update...() объект эпика или подзадачи с существующим в Map Id.
 
-        Также я добавил 3 метода в TaskManager, которые выводят информацию по простым задачам,
-        эпик-задачам и подзадачам – в консоль. Методы называются:
-        printTaskList(), printEpicList(), printSubtaskList();
-
-        Вопрос: в какой пакет по правилам нужно положить класс Main – в какой-то специальный пакет или, может быть,
-        его лучше оставить в src?
+        Про entrySet() почитал, но не применил :(. Мне показалось, что в этой реализации методов update(),
+        от entrySet() – кода меньше не станет. Эркин, я ведь не ошибаюсь? Или я опять парю немножко?
         */
     }
 
     private static void testProgram(TaskManager manager) {
-
-        Task task = new Task("Переезд", "По приезду в Прагу уничтожить обратный билет", "NEW");
+        Task task = new Task("Переезд", "Денег болт, поэтому поеду в Чехию цыганом", "NEW");
         Task task1 = new Task("Купить машину", "Хотя бы Жигули", "NEW");
 
         Epic epic = new Epic("Найти время, чтоб отдохнуть", "Совсем ничего не делать", "NEW");
@@ -65,10 +60,10 @@ public class Main {
         manager.updateSubtask(subtask1);
         System.out.println(manager.getEpicsList() + "\n");
 
-        manager.deleteTaskById(1);
+        manager.deleteTaskById(2);
         manager.deleteSubtaskById(5);
 
-        manager.updateSubtask(subtask);
+        manager.updateEpic(epic);
         manager.updateTask(task);
 
         manager.printTaskList();
