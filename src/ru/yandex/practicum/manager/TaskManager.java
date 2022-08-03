@@ -180,11 +180,13 @@ public class TaskManager {
     }
 
     public void updateTask(Task newTask) { // Обновление простых задач и их статусов.
-        boolean isNotNull = checkTaskForNullOrEmpty(newTask); // Проверка на Null
-        boolean isTaskIdTrue = tasks.containsKey(newTask.getId()); // Проверка на соответствие ключей простой задачи.
+        boolean isNotNull = checkTaskForNull(newTask); // Проверка на Null
 
-        if (isNotNull || isTaskIdTrue) {
-            tasks.put(newTask.getId(), newTask);
+        if (isNotNull) {
+            boolean isTaskIdTrue = tasks.containsKey(newTask.getId()); // Проверка на соответствие ключей простой задачи.
+            if (isTaskIdTrue) {
+                tasks.put(newTask.getId(), newTask);
+            }
         } else {
             System.out.println("Не получилось сделать апдейт простой задачи. Для того, чтобы сделать апдейт – " +
                     "передайте простую задачу с правильным Id");
@@ -196,17 +198,19 @@ public class TaskManager {
     deleteSubtaskById(int removeSubtask), то статус Эпика должен измениться на NEW,
     так как по условию задачи Эпик без подзадач - это NEW */
     public void updateEpic(Epic newEpic) { // Обновление Эпик-задач и их статусов.
-        boolean isNotNull = checkTaskForNullOrEmpty(newEpic); // Проверка на Null.
-        boolean isEpicIdTrue = epics.containsKey(newEpic.getId()); // Проверка на соответствие ключей Эпик-задачи.
+        boolean isNotNull = checkTaskForNull(newEpic); // Проверка на Null.
 
-        if (isNotNull && isEpicIdTrue) {
-            epics.put(newEpic.getId(), newEpic);
-            updateEpicWithSubtask(newEpic.getId());
+        if (isNotNull) {
+            boolean isEpicIdTrue = epics.containsKey(newEpic.getId()); // Проверка на соответствие ключей Эпик-задачи.
+            if (isEpicIdTrue) {
+                epics.put(newEpic.getId(), newEpic);
+                updateEpicWithSubtask(newEpic.getId());
 
-            for (int keyEpic : epics.keySet()) { // Проверка Эпиков на наличие подзадач. Если их нет, то Эпик – NEW.
-                boolean isSubtaskForEpicEmpty = epics.get(keyEpic).getSubtaskIdForEpic().isEmpty();
-                if (isSubtaskForEpicEmpty) {
-                    epics.get(keyEpic).setStatus("NEW");
+                for (int keyEpic : epics.keySet()) { // Проверка Эпиков на наличие подзадач. Если их нет, то Эпик – NEW.
+                    boolean isSubtaskForEpicEmpty = epics.get(keyEpic).getSubtaskIdForEpic().isEmpty();
+                    if (isSubtaskForEpicEmpty) {
+                        epics.get(keyEpic).setStatus("NEW");
+                    }
                 }
             }
         } else {
@@ -216,12 +220,14 @@ public class TaskManager {
     }
 
     public void updateSubtask(Subtask newSubtask) { // Обновление подзадач и их статусов.
-        boolean isNotNull = checkTaskForNullOrEmpty(newSubtask); // Проверка на Null.
-        boolean isSubtaskKeyTrue = subTasks.containsKey(newSubtask.getId()); // Проверка на соответствие ключей подзадачи.
+        boolean isNotNull = checkTaskForNull(newSubtask); // Проверка на Null.
 
-        if (isNotNull && isSubtaskKeyTrue) {
-            subTasks.put(newSubtask.getId(), newSubtask);
-            updateEpicWithSubtask(newSubtask.getId());
+        if (isNotNull) {
+            boolean isSubtaskKeyTrue = subTasks.containsKey(newSubtask.getId()); // Проверка на соответствие ключей подзадачи.
+            if (isSubtaskKeyTrue) {
+                subTasks.put(newSubtask.getId(), newSubtask);
+                updateEpicWithSubtask(newSubtask.getId());
+            }
         } else {
             System.out.println("Не получилось сделать апдейт подзадачи. Для того, чтобы сделать апдейт – " +
                     "передайте подзадачу с правильным Id");
@@ -261,7 +267,7 @@ public class TaskManager {
         }
     }
 
-    private boolean checkTaskForNullOrEmpty(Task task) {
+    private boolean checkTaskForNull(Task task) {
         return (task != null);
     }
 }
