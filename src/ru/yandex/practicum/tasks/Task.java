@@ -3,10 +3,10 @@ package ru.yandex.practicum.tasks;
 public class Task {
     protected String taskName;
     protected String taskDescription;
-    protected String status;
+    protected TaskStatus status;
     protected int id;
 
-    public Task(String taskName, String taskDescription, String status) {
+    public Task(String taskName, String taskDescription, TaskStatus status) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.status = status;
@@ -28,11 +28,11 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
-    public String getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 

@@ -3,7 +3,7 @@ package ru.yandex.practicum.tasks;
 public class Subtask extends Epic {
     private int epicIdForSubtask;
 
-    public Subtask(String taskName, String taskDescription, String status) {
+    public Subtask(String taskName, String taskDescription, TaskStatus status) {
         super(taskName, taskDescription, status);
     }
 
