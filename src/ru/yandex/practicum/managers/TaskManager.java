@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    void createTask(Task task); // Присваивает простой задаче Id и добавляет её в Map.
+    Integer createTask(Task task); // Присваивает простой задаче Id, добавляет её в Map и возвращает Id.
 
-    void createEpic(Epic epic); // Присваивает Эпик-задаче Id и добавляет её в Map.
+    Integer createEpic(Epic epic); // Присваивает Эпик-задаче Id, добавляет её в Map и возвращает Id.
 
-    void createSubtask(Epic epic, Subtask subtask); // Присваивает подзадаче Id и добавляет её в Map.
+    Integer createSubtask(Epic epic, Subtask subtask); // Присваивает подзадаче Id, добавляет её в Map и возвращает Id.
 
-    ArrayList<Task> getTasksList(); // Возвращает список Tasks.Task-объектов из Map.
+    List<Task> getTasksList(); // Возвращает список Tasks.Task-объектов из Map.
 
-    ArrayList<Epic> getEpicsList(); // Возвращает список Tasks.Epic-объектов из Map
+    List<Epic> getEpicsList(); // Возвращает список Tasks.Epic-объектов из Map
 
-    ArrayList<Subtask> getSubTasksList(); // Возвращает список подзадач-объектов из Map.
+    List<Subtask> getSubTasksList(); // Возвращает список подзадач-объектов из Map.
 
-    ArrayList<Subtask> getSubtaskForEpic(Epic epic); // Возвращает список подзадач-объектов определенного эпика.
+    List<Subtask> getSubtaskForEpic(Epic epic); // Возвращает список подзадач-объектов определенного эпика.
 
-    String clearAllTasks(); // Удаляет задачи из всех Map.
+    void clearAllTasks(); // Удаляет задачи из всех Map.
 
     void clearTasks(); // Удаляет простые задачи.
 
@@ -36,11 +36,11 @@ public interface TaskManager {
 
     Subtask getSubtaskById(int idSubtask); // Возвращает подзадачу по Id. Если такой задачи нет, возвращает Null.
 
-    String deleteTaskById(int removeTask); // Удаление задачи по идентификатору.
+    void deleteTaskById(int removeTask); // Удаление задачи по идентификатору.
 
-    String deleteEpicById(int removeEpic); // Удаление Епик-задачи по идентификатору.
+    void deleteEpicById(int removeEpic); // Удаление Епик-задачи по идентификатору.
 
-    String deleteSubtaskById(int removeSubtask); // // Удаление подзадачи по идентификатору.
+    void deleteSubtaskById(int removeSubtask); // // Удаление подзадачи по идентификатору.
 
     void printTaskList(); // Выводит список простых задач в консоль.
 
