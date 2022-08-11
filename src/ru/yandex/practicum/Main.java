@@ -16,21 +16,18 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         testProgram(taskManager);
 
-        /* Привет, Эркин. Правки отправил не сразу, потому что собирался по делам в Москву и ничего не успевал.
-        Но как только я сел в поезд, у меня тут же появилось время, чтобы всё привести в подобающий вид.
+        /* Привет, Эркин :). Замечания я устранил.
 
-        В итоге я устранил все замечения, кроме одного – рекомендательного замечания по созданию подзадачи.
-        Почему его нельзя устранить в данной реализации я описал перед самим методом
-        createSubtask(Epic epic, Subtask subtask); – в классе InMemoryTaskManager, 41 строчка кода.
+        1. Теперь после удаления подзадачи автоматически происходит
+        обновление эпика. А ещё раскомментировал и применил код в методе удаления подзадачи,
+        который ты одобрил.
 
-        Enum через equals я сравниваю в классе InMemoryTaskManager – 322 строчка кода. Как всё-таки правильнее
-        сравнивать Enum – через equals или через == ?
+        2. Переписал код, чтобы сравнение enum происходило через equals.
+        Это сделано в классе InMemoryTaskManager; для твоего удобства я поставил закладку
+        на 311 строчку кода. Старый код я закомментировал. Это я сделал для того,
+        чтобы ты посмотрел и помог мне понять, с какой версией реализации лучше.
 
-        В методе deleteSubtaskById(int removeSubtask) я немножко упростил реализацию, получилось меньше кода.
-        Но применять ее пока не стал (она закомментирована), хочу сначала услышать твоё мнение. Вдруг
-        это решение нехорошее.
-
-        Ну вот вроде бы и всё, что я хотел написать (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
+        (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
         */
     }
 
@@ -71,9 +68,11 @@ public class Main {
 
         subtask1.setStatus(TaskStatus.NEW);
         taskManager.updateSubtask(subtask1);
+        taskManager.updateEpic(epic);
         taskManager.printEpicList();
 
         taskManager.deleteSubtaskById(5);
+        taskManager.printEpicList();
 
         taskManager.updateEpic(epic);
         taskManager.updateTask(task);
@@ -84,7 +83,7 @@ public class Main {
         taskManager.getTaskById(1);
         taskManager.getSubtaskById(5);
         taskManager.getTaskById(2);
-        taskManager.getHistory();
+        System.out.println(taskManager.getHistory());
 
         Task task2 = null;
         taskManager.updateTask(task2); // Проверка на передачу null объекта на апдейт.
