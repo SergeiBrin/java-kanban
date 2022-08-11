@@ -190,18 +190,12 @@ public class InMemoryTaskManager implements TaskManager {
             Подумал и добавил на суд упрощенную реализацию удаления. Но пока её закомментировал
             Просто хочу понять, так лучше, или лучше так не делать, что избежать Null Pointer Exception */
 
-//          int idEpic = subTasks.get(removeSubtask).getEpicIdForSubtask();
-//          epics.get(idEpic).removeStIdForEpic(removeSubtask);
-
-            for (int keyEpic : epics.keySet()) {
-                boolean isTrue = epics.get(keyEpic).getSubtaskIdForEpic().contains(removeSubtask);
-                if (isTrue) {
-                    epics.get(keyEpic).removeStIdForEpic(removeSubtask);
-                }
-            }
+            int idEpic = subTasks.get(removeSubtask).getEpicIdForSubtask();
+            epics.get(idEpic).removeStIdForEpic(removeSubtask);
 
             subTasks.remove(removeSubtask);
             System.out.println("Подзадача с идентификатором " + removeSubtask + " удалена.");
+            updateEpicWithSubtask(idEpic); // После удаления подзадачи происходит обновление эпика.
         }
     }
 
@@ -315,19 +309,31 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         ArrayList<Integer> subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
-        ArrayList<TaskStatus> subtaskStatus = new ArrayList<>(); // Изменил тип на Enum – TaskStatus
+        // ArrayList<TaskStatus> subtaskStatus = new ArrayList<>(); // Изменил тип на Enum – TaskStatus
 
+        int check = 0;
         for (int subTaskId : subtaskIdForEpic) {
-            subtaskStatus.add(subTasks.get(subTaskId).getStatus());
+            // subtaskStatus.add(subTasks.get(subTaskId).getStatus())
+            if (subTasks.get(subTaskId).getStatus().equals(TaskStatus.NEW)) {
+                check++;
+            }
         }
 
-        if ((subtaskStatus.contains(TaskStatus.NEW)) && (subtaskStatus.contains(TaskStatus.DONE))) {
-            epics.get(epicId).setStatus(TaskStatus.IN_PROGRESS);
-        } else if (subtaskStatus.contains(TaskStatus.DONE)) {
+        if (check == subtaskIdForEpic.size()) {
+            epics.get(epicId).setStatus(TaskStatus.NEW);
+        } else if (check == 0) {
             epics.get(epicId).setStatus(TaskStatus.DONE);
         } else {
-            epics.get(epicId).setStatus(TaskStatus.NEW);
+            epics.get(epicId).setStatus(TaskStatus.IN_PROGRESS);
         }
+
+//        if ((subtaskStatus.contains(TaskStatus.NEW)) && (subtaskStatus.contains(TaskStatus.DONE))) {
+//            epics.get(epicId).setStatus(TaskStatus.IN_PROGRESS);
+//        } else if (subtaskStatus.contains(TaskStatus.DONE)) {
+//            epics.get(epicId).setStatus(TaskStatus.DONE);
+//        } else {
+//            epics.get(epicId).setStatus(TaskStatus.NEW);
+//        }
     }
 
     private void add(Task task) { // Метод, который добавляет просмотренную задачу в лист истории класса
