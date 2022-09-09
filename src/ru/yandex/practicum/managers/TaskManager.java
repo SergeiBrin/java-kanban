@@ -53,6 +53,6 @@ public interface TaskManager {
 
     void updateSubtask(Subtask newSubtask); // Обновление подзадач и их статусов.
 
-    List<Task> getHistory(); // Метод нужен, чтобы вернуть исторический лист задач из класса InMemoryHistoryManager(),
-}                            // используя при этом объект типа TaskManager, созданный в классе Managers.
+    List<Task> getHistory();
+}
 

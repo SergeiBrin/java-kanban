@@ -12,7 +12,6 @@ import java.util.List;
 public class InMemoryTaskManager implements TaskManager {
     private int taskId;
 
-    // Все проинициализировал сразу. Конструктор убрал.
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
     private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
@@ -38,29 +37,13 @@ public class InMemoryTaskManager implements TaskManager {
         return taskId;
     }
 
-    /* В этом методе я не могу убрать параметр типа Epic, потому что здесь – помимо создания subtask –
-    происходит привязка subtask к epic. Если все-таки отсюда убрать epic, то d данной реализации программы
-    придётся создавать отдельный метод, который потом будет связывать epic c subtask.
-    А если subtask уже было создано 20 штук, то придется 20 раз вызывать этот метод, либо перегружать его на
-    количество входных параметров.
-
-    Метод createSubtask(Epic epic, Subtask subtask) работает так: на вход приходят 2 объекта – новый объект subtask,
-    у которого еще нет собственного Id, и уже проидентифицированный менеджером объект epic,
-    с которым требуется связать этот subtask.
-    Далее subtask-у присваиваивается id, который передается в epic, а id epic-а передается в этот subtask.
-    Далее subtask ложится в Map. В целом я пытался воспроизвести историю, как в реальной жизни. В которой подзадачи
-    не придумываются раньше основных задач.
-
-    Также в этом методе я предусмотрел ситуацию, когда в него передали epic, который так же не был идентифицирован.
-    Если это так, то сначала на идентификацию отправляется epic, а потом происходит всё остальное.
-     */
     @Override
     public Integer createSubtask(Epic epic, Subtask subtask) { // Присваивает подзадаче Id, добавляет её в Map
         if (epic == null || subtask == null) {                 // и возвращает Id подзадачи.
             return null;
         }
 
-        if (epic.getId() == 0) { // Если у объекта Tasks.Epic id = 0, значит, что он ещё не был идентифицирован менеджером.
+        if (epic.getId() == 0) { // Если у объекта Epic – id = 0, значит, что он ещё не был идентифицирован менеджером.
             createEpic(epic);    // Поэтому отправляем объект для идентификации и добавления в Map.
         }
 
@@ -124,7 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void clearSubtasks() { // Удаляет подзадачи и связь подзадач с Эпиками – Id подадач в объектах Эпик.
+    public void clearSubtasks() { // Удаляет подзадачи и связь подзадач с Эпиками – Id подзадач в объектах Эпик.
         subTasks.clear();
         for (int keyEpic : epics.keySet()) {
             epics.get(keyEpic).clearStIdForEpic();
@@ -136,7 +119,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.get(idTask) == null) {  // добавляет её в исторический список задач.
             return null;
         }
-        add(tasks.get(idTask));
+        add(tasks.get(idTask)); // Добавление простой задачи в исторический список.
         return tasks.get(idTask);
     }
 
@@ -145,7 +128,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.get(idEpic) == null) {  // добавляет её в исторический список задач.
             return null;
         }
-        add(epics.get(idEpic));
+        add(epics.get(idEpic)); // Добавление эпик задачи в исторический список.
         return epics.get(idEpic);
     }
 
@@ -154,15 +137,16 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTasks.get(idSubtask) == null) {     // добавляет её в исторический список задач.
             return null;
         }
-        add(subTasks.get(idSubtask));
+        add(subTasks.get(idSubtask)); // Добавление подзадачи в исторический список.
         return subTasks.get(idSubtask);
     }
 
     @Override
-    public void deleteTaskById(int removeTask) { // Удаление задачи по идентификатору. Теперь void.
+    public void deleteTaskById(int removeTask) { // Удаление задачи по идентификатору.
         if (tasks.get(removeTask) == null) {
             System.out.println("Задачи с идентификатором " + removeTask + " нет :(");
         } else {
+            historyManager.remove(removeTask); // Удаление простой задачи из истории просмотров.
             tasks.remove(removeTask);
             System.out.println("Задача с идентификатором " + removeTask + " удалена.");
         }
@@ -173,6 +157,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.get(removeEpic) == null) {
             System.out.println("Задачи с идентификатором " + removeEpic + " нет :(");
         } else {
+            // Перед удалением эпика из epics и из истории просмотров, удаляю подзадачи этого эпика
+            // из subtask и истории просмотров. Для этого достаю из эпика id подзадач
+            // и отправляю их по очереди в deleteSubtaskById(int removeSubtask)
+            List<Integer> subtaskIdForEpic =  new ArrayList<>(epics.get(removeEpic).getSubtaskIdForEpic());
+            for (Integer id : subtaskIdForEpic) {
+                deleteSubtaskById(id);
+            }
+
+            historyManager.remove(removeEpic); // Удаление эпик из истории просмотров.
             epics.remove(removeEpic);
             System.out.println("Задача с идентификатором " + removeEpic + " удалена.");
         }
@@ -193,8 +186,11 @@ public class InMemoryTaskManager implements TaskManager {
             int idEpic = subTasks.get(removeSubtask).getEpicIdForSubtask();
             epics.get(idEpic).removeStIdForEpic(removeSubtask);
 
+            historyManager.remove(removeSubtask); // Удаление подзадачи из истории просмотров.
             subTasks.remove(removeSubtask);
+
             System.out.println("Подзадача с идентификатором " + removeSubtask + " удалена.");
+
             updateEpicWithSubtask(idEpic); // После удаления подзадачи происходит обновление эпика.
         }
     }
@@ -287,16 +283,13 @@ public class InMemoryTaskManager implements TaskManager {
         return manager.getHistory();
     }
 
+
     /* Это метод, в котором проверяются статусы подзадач – для решения о статусе Эпика,
        связанного с этими подзадачами. В метод передаётся Id эпика иди подзадачи.
 
        Вызывается из updateEpic и из updateSubtask. Сделал так для того, чтобы обновление
        Епика к подзадачам менялось как при обновлении Эпика, так и при обновлении
-       подзадачи.
-
-       !!! Этот метод я не добавил в Интерфейс, потому что в таком случае придётся
-       убирать модификатор private. Но у пользователя не должно быть прямого доступа
-       к этому методу. Такая же история с методами ниже ↓ */
+       подзадачи. */
     private void updateEpicWithSubtask(int idNumber) {
         int epicId = 0;
 
@@ -308,12 +301,10 @@ public class InMemoryTaskManager implements TaskManager {
             epicId = subTasks.get(idNumber).getEpicIdForSubtask();
         }
 
-        ArrayList<Integer> subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
-        // ArrayList<TaskStatus> subtaskStatus = new ArrayList<>(); // Изменил тип на Enum – TaskStatus
+        List<Integer> subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
 
         int check = 0;
         for (int subTaskId : subtaskIdForEpic) {
-            // subtaskStatus.add(subTasks.get(subTaskId).getStatus())
             if (subTasks.get(subTaskId).getStatus().equals(TaskStatus.NEW)) {
                 check++;
             }
@@ -326,14 +317,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epics.get(epicId).setStatus(TaskStatus.IN_PROGRESS);
         }
-
-//        if ((subtaskStatus.contains(TaskStatus.NEW)) && (subtaskStatus.contains(TaskStatus.DONE))) {
-//            epics.get(epicId).setStatus(TaskStatus.IN_PROGRESS);
-//        } else if (subtaskStatus.contains(TaskStatus.DONE)) {
-//            epics.get(epicId).setStatus(TaskStatus.DONE);
-//        } else {
-//            epics.get(epicId).setStatus(TaskStatus.NEW);
-//        }
     }
 
     private void add(Task task) { // Метод, который добавляет просмотренную задачу в лист истории класса
