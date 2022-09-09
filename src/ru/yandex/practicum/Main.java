@@ -7,7 +7,7 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.TaskStatus;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -16,17 +16,21 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         testProgram(taskManager);
 
-        /* Привет, Эркин :). Замечания я устранил.
+        /* Привет, Эркин :). Я тут немножко приболел, и возможно даже смертельно :( (Это не шутка)...
+        Так получилось, что уже до начала 5 спринта я целыми днями бегал по больницам, а по вечерам никак не мог
+        собраться с мыслями. И, несмотря на происходящий с моим здоровьем пздц, я всё равно старался и стараюсь учиться –
+        просто потому что мне это нравится.
 
-        1. Теперь после удаления подзадачи автоматически происходит
-        обновление эпика. А ещё раскомментировал и применил код в методе удаления подзадачи,
-        который ты одобрил.
+        К сожалению, проблемы все-таки пошатнули меня, и я отстал. Финальную работу 5 спринта я закончил только сейчас.
+        Но есть и хорошие новости: c сегодняшнего дня у меня будет много времени, плюс я собрался с мыслями, поэтому
+        я всё наверстаю к концу 8 спринта.
 
-        2. Переписал код, чтобы сравнение enum происходило через equals.
-        Это сделано в классе InMemoryTaskManager; для твоего удобства я поставил закладку
-        на 311 строчку кода. Старый код я закомментировал. Это я сделал для того,
-        чтобы ты посмотрел и помог мне понять, с какой версией реализации лучше.
+        Теперь по проекту.
+        Двусвязный список реализовал. Класс Node закинул в отдельный пакет. Поля класса Node сделал приватными
+        и добавил к ним get и set. В классе Main оставил закомментированные строки для проверки работоспособности
+        программы.
 
+        Жду твоих строгих комментариев на мою работу :)
         (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧
         */
     }
@@ -52,41 +56,19 @@ public class Main {
         taskManager.createSubtask(epic, subtask1);
         taskManager.createSubtask(epic1, subtask2);
 
-        System.out.println(taskManager.getTasksList() + "\n");
-        System.out.println(taskManager.getEpicsList() + "\n");
-        System.out.println(taskManager.getSubTasksList() + "\n");
-
-        task.setStatus(TaskStatus.DONE);
-        taskManager.updateTask(task);
-        taskManager.printTaskList();
-
-        subtask.setStatus(TaskStatus.DONE);
-        taskManager.updateSubtask(subtask);
-
-        taskManager.printEpicList();
-        taskManager.printSubtaskList();
-
-        subtask1.setStatus(TaskStatus.NEW);
-        taskManager.updateSubtask(subtask1);
-        taskManager.updateEpic(epic);
-        taskManager.printEpicList();
-
-        taskManager.deleteSubtaskById(5);
-        taskManager.printEpicList();
-
-        taskManager.updateEpic(epic);
-        taskManager.updateTask(task);
-
-        taskManager.printEpicList();
-        taskManager.printSubtaskList();
-        taskManager.getEpicById(3);
         taskManager.getTaskById(1);
+        taskManager.getEpicById(3);
         taskManager.getSubtaskById(5);
-        taskManager.getTaskById(2);
-        System.out.println(taskManager.getHistory());
+        taskManager.getSubtaskById(6);
 
-        Task task2 = null;
-        taskManager.updateTask(task2); // Проверка на передачу null объекта на апдейт.
+        // taskManager.getTaskById(1);
+        // taskManager.getEpicById(3);
+        // taskManager.deleteTaskById(1);
+        // taskManager.deleteEpicById(3);
+        // taskManager.deleteSubtaskById(5);
+
+        List<Task> list = taskManager.getHistory();
+        System.out.println(list);
     }
 }
 
