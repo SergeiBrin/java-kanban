@@ -87,30 +87,56 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks;
     }
 
+    /* Метод удаляет задачи из всех Map и из истории просмотров.
+    Так как удаляются абсолютно все задачи, то эффективнее будет сразу же удалить всю историю из HistoryManager,
+    чем отправлять на удаление поочередно id задач. Специально для этой задачи я создал в HistoryManager
+    метод clearHistory(), который очищает историю и обнуляет все ссылки на объекты.
+     */
     @Override
-    public void clearAllTasks() { // Удаляет задачи из всех Map.
-        clearTasks();
-        clearEpics();
+    public void clearAllTasks() { //
+        historyManager.clearHistory();
+
+        /* Здесь методы clearTasks(), clearEpics() и clearSubtasks() вызывать не стал,
+        потому что они будут итерировать по всем существующим задачам, что замедлит
+        работу программы.
+         */
+        tasks.clear();
+        epics.clear();
+        subTasks.clear();
+
         System.out.println("Все списки задач очищены, и у вас больше нет ни одной задачи. " +
-                "Наконец-то настал тот день, когда Вы сможете полежать :)");
+                "Наконец-то настал тот день, когда Вы сможете совсем ничего не делать :)");
     }
 
     @Override
     public void clearTasks() { // Удаляет простые задачи.
+        for (Integer taskId : tasks.keySet()) {
+            historyManager.remove(taskId);  // Передаёт id задач в HistoryManager для удаления.
+        }
         tasks.clear();
     }
 
     @Override
     public void clearEpics() { // Удаляет Епик-задачи и подзадачи, так как подзадачи
-        epics.clear();         // являются частью эпик-задач и связаны с ними.
+        for (Integer epicId : epics.keySet()) {
+            historyManager.remove(epicId);  // Передаёт id эпик задач в HistoryManager для удаления.
+            for (Integer subtaskId : epics.get(epicId).getSubtaskIdForEpic()) {
+                historyManager.remove(subtaskId);  // Передаёт id подзадач в HistoryManager для удаления.
+            }
+        }
+        epics.clear();
         subTasks.clear();
     }
 
     @Override
     public void clearSubtasks() { // Удаляет подзадачи и связь подзадач с Эпиками – Id подзадач в объектах Эпик.
+        for (Integer subtaskId : subTasks.keySet()) {
+            historyManager.remove(subtaskId);  // Передаёт id подзадач в HistoryManager для удаления.
+        }
         subTasks.clear();
+
         for (int keyEpic : epics.keySet()) {
-            epics.get(keyEpic).clearStIdForEpic();
+            epics.get(keyEpic).clearStIdForEpic(); // Удаление id подзадач из всех эпиков.
         }
     }
 
