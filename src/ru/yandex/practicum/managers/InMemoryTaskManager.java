@@ -160,7 +160,7 @@ public class InMemoryTaskManager implements TaskManager {
             // Перед удалением эпика из epics и из истории просмотров, удаляю подзадачи этого эпика
             // из subtask и истории просмотров. Для этого достаю из эпика id подзадач
             // и отправляю их по очереди в deleteSubtaskById(int removeSubtask)
-            List<Integer> subtaskIdForEpic =  new ArrayList<>(epics.get(removeEpic).getSubtaskIdForEpic());
+            List<Integer> subtaskIdForEpic = new ArrayList<>(epics.get(removeEpic).getSubtaskIdForEpic());
             for (Integer id : subtaskIdForEpic) {
                 deleteSubtaskById(id);
             }
@@ -178,10 +178,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
          /* Перед удалением подзадачи удаляю связь подзадачи с эпиком.
             Так как связь лежит в ArrayList объекта эпик в виде id подзадачи,
-            удаляю её по заведомо известному значению ↓
-
-            Подумал и добавил на суд упрощенную реализацию удаления. Но пока её закомментировал
-            Просто хочу понять, так лучше, или лучше так не делать, что избежать Null Pointer Exception */
+            удаляю её по заведомо известному значению ↓ */
 
             int idEpic = subTasks.get(removeSubtask).getEpicIdForSubtask();
             epics.get(idEpic).removeStIdForEpic(removeSubtask);
