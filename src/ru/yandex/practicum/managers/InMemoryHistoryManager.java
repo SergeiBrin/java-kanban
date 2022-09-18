@@ -41,47 +41,33 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             int id = node.getData().getId();
 
-            if (size == 1) { // Если размер списка 1, значит в нем есть только head.
-                head = null;
-                historyManager.remove(id); // Удаляем задачу из истории.
-            } else if (size == 2) { // Если размер списка 2, значит в нем есть 2 значения - head и tail. Уточняем, пересвязываем и удаляем.
-                if (head == node) {
-                    head = node.getNext();
-                    tail = null;
-                    historyManager.remove(id);
-                } else {
-                    head.setNext(null);
-                    ;
-                    tail = null;
-                    historyManager.remove(id);
-                }
-            } else { // Если размер списка > 2, значит в нем есть head, другие узлы и tail. Уточняем, пересвязываем и удаляем.
-                if (head == node) {
-                    head = node.getNext();
+            if (head.equals(node)) { // В Node переопределил метод equals, чтобы не было ошибок.
+                head = node.getNext();
+                if (head != null) {
                     head.setPrev(null);
-                    historyManager.remove(id);
-                } else if (tail == node) {
-                    tail = node.getPrev();
-                    tail.setNext(null);
-                    historyManager.remove(id);
-                } else {
-                    node.getPrev().setNext(node.getNext());
-                    node.getNext().setPrev(node.getPrev());
-                    historyManager.remove(id);
                 }
+                historyManager.remove(id);
+            } else if (tail.equals(node)) {
+                tail = node.getPrev();
+                tail.setNext(null);
+                historyManager.remove(id);
+            } else {
+                node.getPrev().setNext(node.getNext());
+                node.getNext().setPrev(node.getPrev());
+                historyManager.remove(id);
             }
             size--; // Уменьшаем размер двусвязного списка.
         }
 
         public void linkLast(Task task) {
-            if (size == 0) { // // Если размер списка 0, значит первым элементом будет head.
+            if (head == null) { // // Если head == null, значит список пуст и первым элементом будет head.
                 head = new Node<>(task, null, null);
                 historyManager.put(task.getId(), head); // Кладем задачу в историю.
-            } else if (size == 1) { // Если размер списка 1, значит head уже есть, и новым элементом будет tail.
+            } else if (tail == null) { // Если tail == null, значит есть только head, и след. элементом будет tail.
                 tail = new Node<>(task, head, null);
                 head.setNext(tail);
                 historyManager.put(task.getId(), tail); // Кладем задачу в историю.
-            } else { // Если размер списка > 1, значит в нем уже есть head и tail. Добавляем новый tail. Пересвязываем узлы.
+            } else { // Иначе head и tail уже есть. Добавляем новый tail. Пересвязываем узлы.
                 Node<Task> node = tail;
                 tail = new Node<>(task, node, null);
                 node.setNext(tail);
