@@ -29,6 +29,14 @@ public class InMemoryHistoryManager implements HistoryManager {
         customLinkedList.removeNode(historyManager.get(id)); // Метод пересвязывает ссылками Node-узлы и удаляет задачу из historyManager.
     }
 
+    @Override
+    public void clearHistory() { // Удаляет всю историю просмотров и обнуляет двусвязный список.
+        historyManager.clear();
+        customLinkedList.head = null;
+        customLinkedList.tail = null;
+        customLinkedList.setSize(0);
+    }
+
     private class CustomLinkedList {
         private Node<Task> head;
         private Node<Task> tail;
@@ -89,6 +97,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public int getSize() { // Метод возвращает размер двусвязного списка.
             return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
         }
     }
 }
