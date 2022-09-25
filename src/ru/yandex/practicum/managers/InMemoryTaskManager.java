@@ -8,13 +8,13 @@ import ru.yandex.practicum.tasks.TaskStatus;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int taskId;
-
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subTasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory(); // Возвращает новый объект типа HistoryManager.
 
     @Override
@@ -22,6 +22,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (task == null) {                // и возвращает Id простой задачи.
             return null;
         }
+
         task.setId(++taskId);
         tasks.put(taskId, task);
         return taskId;
@@ -54,6 +55,41 @@ public class InMemoryTaskManager implements TaskManager {
 
         subTasks.put(taskId, subtask);
         return taskId;
+    }
+
+    @Override
+    public Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    @Override
+    public Map<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    @Override
+    public Map<Integer, Subtask> getSubTasks() {
+        return subTasks;
+    }
+
+    @Override
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
+
+    @Override
+    public void setTasksMap(Task task) {
+        tasks.put(task.getId(), task);
+    }
+
+    @Override
+    public void setEpicsMap(Task task) {
+        epics.put(task.getId(), (Epic) task);
+    }
+
+    @Override
+    public void setSubtasksMap(Task task) {
+        subTasks.put(task.getId(), (Subtask) task);
     }
 
     @Override

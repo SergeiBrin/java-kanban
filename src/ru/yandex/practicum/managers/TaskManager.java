@@ -5,6 +5,7 @@ import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
     Integer createTask(Task task); // Присваивает простой задаче Id, добавляет её в Map и возвращает Id.
@@ -12,6 +13,20 @@ public interface TaskManager {
     Integer createEpic(Epic epic); // Присваивает Эпик-задаче Id, добавляет её в Map и возвращает Id.
 
     Integer createSubtask(Epic epic, Subtask subtask); // Присваивает подзадаче Id, добавляет её в Map и возвращает Id.
+
+    Map<Integer, Task> getTasks(); // Возвращает Map простых задач.
+
+    Map<Integer, Epic> getEpics(); // Возвращает Map епик задач.
+
+    Map<Integer, Subtask> getSubTasks(); // Возвращает Map подзадач.
+
+    void setTaskId(int taskId); // Передает id.
+
+    void setTasksMap(Task task); // Передает простую задачу в Map.
+
+    void setEpicsMap(Task task); // Передает эпик задачу в Map.
+
+    void setSubtasksMap(Task task); // Передает подзадачу в Map.
 
     List<Task> getTasksList(); // Возвращает список Tasks.Task-объектов из Map.
 

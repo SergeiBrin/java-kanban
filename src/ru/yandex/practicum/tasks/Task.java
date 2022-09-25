@@ -44,6 +44,10 @@ public class Task {
         this.id = id;
     }
 
+    public String getClassName() {
+        return "Task";
+    }
+
     @Override
     public String toString() {
         return "Tasks.Task{" +

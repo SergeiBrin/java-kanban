@@ -16,6 +16,11 @@ public class Subtask extends Epic {
     }
 
     @Override
+    public String getClassName() {
+        return "Subtask";
+    }
+
+    @Override
     public String toString() {
         return "Tasks.Subtask{" +
                 "id=" + getId() +
