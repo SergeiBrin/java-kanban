@@ -2,7 +2,9 @@ package ru.yandex.practicum;
 
 import ru.yandex.practicum.managers.Managers;
 import ru.yandex.practicum.managers.TaskManager;
-import ru.yandex.practicum.tasks.*;
+import ru.yandex.practicum.tasks.Epic;
+import ru.yandex.practicum.tasks.Subtask;
+import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.enums.TaskStatus;
 
 import java.util.List;
@@ -16,19 +18,9 @@ public class Main {
         testProgram(taskManager);
 
         /* Привет, Эркин.
-        Сегодня буду немногословен, потому что мне очень нехорошо.
-        Из-за того, что один человек решил утащить нас всех в пропасть, а многих и на тот свет,
-        я плохо сплю и думаю совершенно не о программировании. Очень тяжело собраться с мыслями.
+        С табуляцией вкурил.
 
-        Но я всё же собрался и дописал код 6 спринта. После много раз продебажил и, вроде бы,
-        все ошибки устранил.
-
-        Объяснения работы кода оставил прям в новых классах – по ходу кода.
-        Так тебе будет легче разобрать мои каракули :).
-
-        Код для проверки FileBackedTasksManager лежит в нём.
-
-        До встречи. Береги себя.
+        Проверяй :)
         */
     }
 
