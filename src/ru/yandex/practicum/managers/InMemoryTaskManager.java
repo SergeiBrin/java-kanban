@@ -3,7 +3,7 @@ package ru.yandex.practicum.managers;
 import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
-import ru.yandex.practicum.tasks.TaskStatus;
+import ru.yandex.practicum.tasks.enums.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -206,18 +206,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int removeTask) { // Удаление задачи по идентификатору.
         if (tasks.get(removeTask) == null) {
-            System.out.println("Задачи с идентификатором " + removeTask + " нет :(");
+            System.out.println("Простой задачи с идентификатором " + removeTask + " нет :(");
         } else {
             historyManager.remove(removeTask); // Удаление простой задачи из истории просмотров.
             tasks.remove(removeTask);
-            System.out.println("Задача с идентификатором " + removeTask + " удалена.");
+            System.out.println("Простая задача с идентификатором " + removeTask + " удалена.");
         }
     }
 
     @Override
     public void deleteEpicById(int removeEpic) { // Удаление Епик-задачи по идентификатору. Теперь void.
         if (epics.get(removeEpic) == null) {
-            System.out.println("Задачи с идентификатором " + removeEpic + " нет :(");
+            System.out.println("Эпик-задачи с идентификатором " + removeEpic + " нет :(");
         } else {
             // Перед удалением эпика из epics и из истории просмотров, удаляю подзадачи этого эпика
             // из subtask и истории просмотров. Для этого достаю из эпика id подзадач
@@ -229,7 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
 
             historyManager.remove(removeEpic); // Удаление эпик из истории просмотров.
             epics.remove(removeEpic);
-            System.out.println("Задача с идентификатором " + removeEpic + " удалена.");
+            System.out.println("Эпик-задача с идентификатором " + removeEpic + " удалена.");
         }
     }
 

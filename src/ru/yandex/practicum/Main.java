@@ -3,6 +3,7 @@ package ru.yandex.practicum;
 import ru.yandex.practicum.managers.Managers;
 import ru.yandex.practicum.managers.TaskManager;
 import ru.yandex.practicum.tasks.*;
+import ru.yandex.practicum.tasks.enums.TaskStatus;
 
 import java.util.List;
 
