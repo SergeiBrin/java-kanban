@@ -1,6 +1,9 @@
 package ru.yandex.practicum.tasks;
 
+import ru.yandex.practicum.tasks.enums.TaskStatus;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subtasksIdForEpic;
@@ -29,6 +32,20 @@ public class Epic extends Task {
     @Override
     public String getClassName() {
         return "Epic";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(subtasksIdForEpic, epic.subtasksIdForEpic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), subtasksIdForEpic);
     }
 
     @Override

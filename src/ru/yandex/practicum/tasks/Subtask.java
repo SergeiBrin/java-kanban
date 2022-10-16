@@ -1,5 +1,9 @@
 package ru.yandex.practicum.tasks;
 
+import ru.yandex.practicum.tasks.enums.TaskStatus;
+
+import java.util.Objects;
+
 public class Subtask extends Epic {
     private int epicIdForSubtask;
 
@@ -18,6 +22,20 @@ public class Subtask extends Epic {
     @Override
     public String getClassName() {
         return "Subtask";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Subtask subtask = (Subtask) o;
+        return epicIdForSubtask == subtask.epicIdForSubtask;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), epicIdForSubtask);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package ru.yandex.practicum.tasks;
 
+import ru.yandex.practicum.tasks.enums.TaskStatus;
+
+import java.util.Objects;
+
 public class Task {
     protected String taskName;
     protected String taskDescription;
@@ -46,6 +50,19 @@ public class Task {
 
     public String getClassName() {
         return "Task";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(taskName, task.taskName) && Objects.equals(taskDescription, task.taskDescription) && status == task.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(taskName, taskDescription, status, id);
     }
 
     @Override
