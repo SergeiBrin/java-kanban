@@ -1,4 +1,8 @@
-package ru.yandex.practicum.tasks;
+package ru.yandex.practicum.tasks.formatter;
+
+import ru.yandex.practicum.tasks.*;
+import ru.yandex.practicum.tasks.enums.TaskStatus;
+import ru.yandex.practicum.tasks.enums.TaskType;
 
 import java.util.ArrayList;
 import java.util.List;
