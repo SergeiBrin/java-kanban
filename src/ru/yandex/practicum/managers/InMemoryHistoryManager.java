@@ -84,8 +84,10 @@ public class InMemoryHistoryManager implements HistoryManager {
             size++; // Увеличиваем размер двусвязного списка.
         }
 
-        private List<Task> getTask() { // Метод проходится по ссылкам узлов Node – от head до tail – и возвращает их
-            List<Task> listHistory = new ArrayList<>(); // листом с объектами Task.
+        // Метод проходится по ссылкам узлов Node – от head до tail –
+        // и возвращает их листом с объектами Task.
+        private List<Task> getTask() {
+            List<Task> listHistory = new ArrayList<>();
             Node<Task> node = head;
 
             while (node != null) {
