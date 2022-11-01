@@ -4,12 +4,15 @@ import ru.yandex.practicum.tasks.*;
 import ru.yandex.practicum.tasks.enums.TaskStatus;
 import ru.yandex.practicum.tasks.enums.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskCsvFormatter {
     public static String getFileHeader() { // Метод возвращает заголовок для scv файла.
-        return "id,type,name,status,description,epic";
+        return "id,type,name,status,description,time,duration,epic_id";
     }
 
     public static String toString(Task task) { // Метод сохранения задачи в строку
@@ -17,14 +20,15 @@ public class TaskCsvFormatter {
         // В таком виде выглядит красиво.
         switch (task.getClassName()) {
             case "Subtask":
-                return String.format("%s,%s,%s,%s,%s,%s", task.getId(), TaskType.SUBTASK, task.getTaskName(),
-                        task.getStatus(), task.getTaskDescription(), ((Subtask) task).getEpicIdForSubtask());
+                return String.format("%s,%s,%s,%s,%s,%s,%s,%s", task.getId(), TaskType.SUBTASK, task.getTaskName(),
+                        task.getStatus(), task.getTaskDescription(),
+                        task.getStartTime(), task.getDuration(), ((Subtask) task).getEpicIdForSubtask());
             case "Epic":
-                return String.format("%s,%s,%s,%s,%s", task.getId(), TaskType.EPIC, task.getTaskName(),
-                        task.getStatus(), task.getTaskDescription());
+                return String.format("%s,%s,%s,%s,%s,%s,%s", task.getId(), TaskType.EPIC, task.getTaskName(),
+                        task.getStatus(), task.getTaskDescription(), task.getStartTime(), task.getDuration());
             case "Task":
-                return String.format("%s,%s,%s,%s,%s", task.getId(), TaskType.TASK, task.getTaskName(),
-                        task.getStatus(), task.getTaskDescription());
+                return String.format("%s,%s,%s,%s,%s,%s,%s", task.getId(), TaskType.TASK, task.getTaskName(),
+                        task.getStatus(), task.getTaskDescription(), task.getStartTime(), task.getDuration());
             default:
                 return "";
         }
@@ -41,6 +45,8 @@ public class TaskCsvFormatter {
         String name = "";
         String description = "";
         TaskStatus status = TaskStatus.NEW;
+        LocalDateTime dateTime = null;
+        Duration duration = null;
 
         // Инициализация переменных.
         for (int i = 0; i < values.length; i++) {
@@ -65,6 +71,22 @@ public class TaskCsvFormatter {
                     description = values[i];
                     break;
                 case 5:
+                    // New!!!
+                    try {
+                        dateTime = LocalDateTime.parse(values[i]);
+                    } catch (DateTimeParseException e) {
+                        dateTime = null;
+                    }
+                    break;
+                case 6:
+                    // New!!!
+                    try {
+                        duration = Duration.parse(values[i]);
+                    } catch (DateTimeParseException e) {
+                        duration = null;
+                    }
+                    break;
+                case 7:
                     epicId = Integer.parseInt(values[i]);
                     break;
             }
@@ -73,15 +95,15 @@ public class TaskCsvFormatter {
         // Воссоздание Task из переменных.
         switch (type) {
             case "TASK":
-                task = new Task(name, description, status);
+                task = new Task(name, description, status, dateTime, duration);
                 task.setId(id);
                 break;
             case "EPIC":
-                task = new Epic(name, description, status);
+                task = new Epic(name, description, status, dateTime, duration);
                 task.setId(id);
                 break;
             case "SUBTASK":
-                Subtask subtask = new Subtask(name, description, status);
+                Subtask subtask = new Subtask(name, description, status, dateTime, duration);
                 subtask.setId(id);
                 subtask.setEpicIdForSubtask(epicId);
                 task = subtask;
