@@ -2,13 +2,15 @@ package ru.yandex.practicum.tasks;
 
 import ru.yandex.practicum.tasks.enums.TaskStatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Epic {
     private int epicIdForSubtask;
 
-    public Subtask(String taskName, String taskDescription, TaskStatus status) {
-        super(taskName, taskDescription, status);
+    public Subtask(String taskName, String taskDescription, TaskStatus status, LocalDateTime startTime, Duration duration) {
+        super(taskName, taskDescription, status, startTime, duration);
     }
 
     public int getEpicIdForSubtask() {
@@ -45,7 +47,10 @@ public class Subtask extends Epic {
                 ", status='" + getStatus() + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
-                ", epicIdForSubtask=[" + epicIdForSubtask +"]" +
+                ", startTime=[" + startTime + "]" +
+                ", duration=[" + duration + "]" +
+                ", endTime=[" + getEndTime() + "]" +
+                ", epicIdForSubtask=[" + epicIdForSubtask + "]" +
                 '}';
     }
 }

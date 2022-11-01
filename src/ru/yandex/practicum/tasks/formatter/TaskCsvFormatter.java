@@ -16,8 +16,6 @@ public class TaskCsvFormatter {
     }
 
     public static String toString(Task task) { // Метод сохранения задачи в строку
-        // Применил СтрингФормат, потому что все переменные известны.
-        // В таком виде выглядит красиво.
         switch (task.getClassName()) {
             case "Subtask":
                 return String.format("%s,%s,%s,%s,%s,%s,%s,%s", task.getId(), TaskType.SUBTASK, task.getTaskName(),
@@ -71,7 +69,7 @@ public class TaskCsvFormatter {
                     description = values[i];
                     break;
                 case 5:
-                    // New!!!
+                    // New! Если в файле null, то перехват
                     try {
                         dateTime = LocalDateTime.parse(values[i]);
                     } catch (DateTimeParseException e) {
@@ -79,7 +77,7 @@ public class TaskCsvFormatter {
                     }
                     break;
                 case 6:
-                    // New!!!
+                    // New! Если в файле null, то перехват
                     try {
                         duration = Duration.parse(values[i]);
                     } catch (DateTimeParseException e) {
@@ -113,7 +111,6 @@ public class TaskCsvFormatter {
     }
 
     public static String historyToString(List<Task> manager) { // Сохранение истории.
-        // Использовал Стрингбилдер, потому что тут подходит поочередное добавление в строку.
         StringBuilder builder = new StringBuilder();
         int count = 1;
 

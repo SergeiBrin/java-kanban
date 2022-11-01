@@ -6,6 +6,7 @@ import ru.yandex.practicum.tasks.Task;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
     Integer createTask(Task task); // Присваивает простой задаче Id, добавляет её в Map и возвращает Id.
@@ -19,6 +20,8 @@ public interface TaskManager {
     Map<Integer, Epic> getEpics(); // Возвращает Map епик задач.
 
     Map<Integer, Subtask> getSubTasks(); // Возвращает Map подзадач.
+
+    int getTaskId(); // Возвращает id менеджера задач.
 
     void setTaskId(int taskId); // Передает id.
 
@@ -68,6 +71,8 @@ public interface TaskManager {
 
     void updateSubtask(Subtask newSubtask); // Обновление подзадач и их статусов.
 
-    List<Task> getHistory();
+    List<Task> getHistory(); // Возвращает историю
+
+    Set<Task> getPrioritizedTasks(); // Возвращает отсортированный по startTime список задач
 }
 
