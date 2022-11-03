@@ -454,6 +454,7 @@ public class InMemoryTaskManager implements TaskManager {
     private void calculateEpicTime(Epic epic, Subtask subtask) {
         List<Integer> subtaskIdForEpic = epic.getSubtaskIdForEpic();
         boolean isSizeZero = subtaskIdForEpic.isEmpty();
+        // todo
         boolean isSizeOne = subtaskIdForEpic.size() == 1; // New. Проверка на то, что у Эпика только один Subtask.
 
         if (isSizeZero) {
@@ -469,6 +470,7 @@ public class InMemoryTaskManager implements TaskManager {
             // Если Эпик не Null и Subtask не Null, то сравниваем startTime и endTime
             // Эпика и Subtask. При необходимости переназначаем Время Эпика.
         } else if (subtask.getStartTime() != null) {
+            // todo
             if (isSizeOne) {                               // New. Если у Эпика это первый Subtask, то его время должно
                 epic.setStartTime(subtask.getStartTime()); // быть сразу же назначено Эпику. Иначе время самого Эпика может
                 epic.setEndTime(subtask.getEndTime());     // оказаться раньше и/или позже времени Subtask - и не переназначится.
