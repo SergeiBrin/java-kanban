@@ -6,7 +6,6 @@ import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.enums.TaskStatus;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
@@ -455,6 +454,7 @@ public class InMemoryTaskManager implements TaskManager {
     private void calculateEpicTime(Epic epic, Subtask subtask) {
         List<Integer> subtaskIdForEpic = epic.getSubtaskIdForEpic();
         boolean isSizeZero = subtaskIdForEpic.isEmpty();
+        boolean isSizeOne = subtaskIdForEpic.size() == 1;
 
         if (isSizeZero) {
             return;
@@ -469,6 +469,10 @@ public class InMemoryTaskManager implements TaskManager {
             // Если Эпик не Null и Subtask не Null, то сравниваем startTime и endTime
             // Эпика и Subtask. При необходимости переназначаем Время Эпика.
         } else if (subtask.getStartTime() != null) {
+            if (isSizeOne) {
+                epic.setStartTime(subtask.getStartTime());
+            }
+
             boolean startTime = subtask.getStartTime().isBefore(epic.getStartTime());
             boolean endTime = subtask.getEndTime().isAfter(epic.getEndTime());
 
