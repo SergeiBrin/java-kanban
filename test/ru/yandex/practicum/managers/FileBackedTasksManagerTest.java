@@ -102,6 +102,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         // Создаю задачи, вызываю по id
         final int taskId = taskManager.createTask(task);
         final int epicId = taskManager.createEpic(epic);
+
         taskManager.createSubtask(epic, subtask1);
 
         final Task savedTask = taskManager.getTaskById(taskId);

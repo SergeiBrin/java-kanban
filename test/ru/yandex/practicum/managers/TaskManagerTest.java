@@ -33,7 +33,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         epic = new Epic("Test Epic name",
                         "Test Epic Description",
                         TaskStatus.NEW,
-                        LocalDateTime.now(),
+                        LocalDateTime.now().minusDays(1),
                         Duration.ZERO);
 
         subtask1 = new Subtask("Test Subtask1 name",
