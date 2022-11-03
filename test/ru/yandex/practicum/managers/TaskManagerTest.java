@@ -269,7 +269,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void createEpicWithSubtasksAndCheckSubtasksForEpic() {
         // Создаём Эпик задачу и подзадачу.
-        final int epicId = taskManager.createEpic(epic);
+        taskManager.createEpic(epic);
         final int subtaskId = taskManager.createSubtask(epic, subtask1);
 
         // Возвращаем лист подзадач Эпика и проверяем
@@ -318,8 +318,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void checkThatForListOfSubtasksWithNewStatusEpicStatusIsNew() {
         // Создаём Эпик задачу и две подзадачи
         final int epicId = taskManager.createEpic(epic);
-        final int subtaskId1 = taskManager.createSubtask(epic, subtask1);
-        final int subtaskId2 = taskManager.createSubtask(epic, subtask2);
+        taskManager.createSubtask(epic, subtask1);
+        taskManager.createSubtask(epic, subtask2);
 
         // Делаем апдейт, возвращаем Эпик задачу из менеджера и проверяем ее статус
         taskManager.updateEpic(epic);
@@ -559,7 +559,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void createSubtaskAndCheckItExistsInTaskManager() {
         // Создаём подзадачу.
-        final int epicId = taskManager.createEpic(epic);
+        taskManager.createEpic(epic);
         final int subtaskId = taskManager.createSubtask(epic, subtask1);
 
         // Возвращаем подзадачу по id и проверяем ее наличие
@@ -599,7 +599,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void updateSubtaskStatusAndMakeSureItHasChanged() {
         // Создаём подзадачу.
-        final int epicId = taskManager.createEpic(epic);
+        taskManager.createEpic(epic);
         final int subtaskId = taskManager.createSubtask(epic, subtask1);
 
         // Передаем новый статус и делаем апдейт
@@ -646,10 +646,37 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         // Проверяем, что подзадача удалена, и её Id удален и списка Id Эпик задачи
         assertNull(deleteSubtask, "Подзадача должна быть null");
-        assertTrue(deleteSubtaskList.isEmpty(), "Cписок с этой подзадачей должен быть пуст");
+        assertTrue(deleteSubtaskList.isEmpty(), "Список с этой подзадачей должен быть пуст");
         assertTrue(deleteSubtaskMap.isEmpty(), "Map c подзадачей должен быть пуст");
         assertEquals(0, deleteEpicIdForSubtask, "id Эпика подзадачи должен быть 0");
         assertTrue(subtaskIdForEpic.isEmpty(), "Id подзадачи в списке Эпика быть не должно.");
+    }
+
+    // New!
+    @Test
+    public void createEpicAndSubtaskTimesOfEpicAndSubtasksMustMatch() {
+        // Создаю Эпик и первую подзадачу. startTime подзадачи раньше, endTime – позже
+        final int epicId = taskManager.createEpic(epic);
+        final int subtaskId1 = taskManager.createSubtask(epic, subtask1);
+
+        Epic savedEpic = taskManager.getEpicById(epicId);
+        Subtask savedSubtask1 = taskManager.getSubtaskById(subtaskId1);
+
+        // Проверяю, что время у Эпика переназначилось
+        assertEquals(savedEpic.getStartTime(), savedSubtask1.getStartTime(), "Время Эпика и его первой задачи должны совпадать");
+        assertEquals(savedEpic.getEndTime(), savedSubtask1.getEndTime(), "Время Эпика и его первой задачи должны совпадать");
+
+        // Создаю вторую подзадачу с более ранним startTime
+        subtask2.setStartTime(LocalDateTime.now().minusDays(10));
+        subtask2.setDuration(Duration.ofDays(2));
+
+        final int subtaskId2 = taskManager.createSubtask(epic, subtask2);
+
+        Subtask savedSubtask2 = taskManager.getSubtaskById(subtaskId2);
+
+        // Проверяю, что startTime у Эпика стал раньше, а endTime не изменился.
+        assertEquals(savedEpic.getStartTime(), savedSubtask2.getStartTime(), "startTime Эпика должен быть равен самому раннему startTime всех подзадач");
+        assertEquals(savedEpic.getEndTime(), savedSubtask1.getEndTime(), "endTime Эпика должен быть равен самому позднему endTime всех подзадач");
     }
 
     @Test
