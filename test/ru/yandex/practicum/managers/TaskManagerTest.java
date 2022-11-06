@@ -33,7 +33,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         epic = new Epic("Test Epic name",
                         "Test Epic Description",
                         TaskStatus.NEW,
-                        LocalDateTime.now().minusDays(1),
+                        LocalDateTime.now(),
                         Duration.ZERO);
 
         subtask1 = new Subtask("Test Subtask1 name",
@@ -657,6 +657,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void createEpicAndSubtaskTimesOfEpicAndSubtasksMustMatch() {
         // Создаю Эпик и первую подзадачу. startTime подзадачи раньше, endTime – позже
         final int epicId = taskManager.createEpic(epic);
+        subtask1.setStartTime(LocalDateTime.now().minusDays(1));
+        subtask1.setDuration(Duration.ofMinutes(25));
         final int subtaskId1 = taskManager.createSubtask(epic, subtask1);
 
         Epic savedEpic = taskManager.getEpicById(epicId);
