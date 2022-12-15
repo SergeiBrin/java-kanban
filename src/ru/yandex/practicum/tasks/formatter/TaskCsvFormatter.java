@@ -1,6 +1,8 @@
 package ru.yandex.practicum.tasks.formatter;
 
-import ru.yandex.practicum.tasks.*;
+import ru.yandex.practicum.tasks.Epic;
+import ru.yandex.practicum.tasks.Subtask;
+import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.enums.TaskStatus;
 import ru.yandex.practicum.tasks.enums.TaskType;
 

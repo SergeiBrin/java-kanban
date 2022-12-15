@@ -1,35 +1,37 @@
 package ru.yandex.practicum.node;
 
+import ru.yandex.practicum.tasks.Task;
+
 import java.util.Objects;
 
-public class Node<Task> {
-    private final Task data;
-    private Node<Task> next;
-    private Node<Task> prev;
+public class Node<T extends Task> {
+    private final T data;
+    private Node<T> next;
+    private Node<T> prev;
 
-    public Node(Task data, Node<Task> prev, Node<Task> next) {
+    public Node(T data, Node<T> prev, Node<T> next) {
         this.data = data;
         this.next = next;
         this.prev = prev;
     }
 
-    public Task getData() {
+    public T getData() {
         return data;
     }
 
-    public Node<Task> getNext() {
+    public Node<T> getNext() {
         return next;
     }
 
-    public void setNext(Node<Task> next) {
+    public void setNext(Node<T> next) {
         this.next = next;
     }
 
-    public Node<Task> getPrev() {
+    public Node<T> getPrev() {
         return prev;
     }
 
-    public void setPrev(Node<Task> prev) {
+    public void setPrev(Node<T> prev) {
         this.prev = prev;
     }
 

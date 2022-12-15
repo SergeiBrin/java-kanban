@@ -31,6 +31,8 @@ public interface TaskManager {
 
     void setSubtasksMap(Task task); // Передает подзадачу в Map.
 
+    List<Task> getAllTaskList(); // Возвращает список всех задач.
+
     List<Task> getTasksList(); // Возвращает список Tasks.Task-объектов из Map.
 
     List<Epic> getEpicsList(); // Возвращает список Tasks.Epic-объектов из Map
@@ -74,5 +76,7 @@ public interface TaskManager {
     List<Task> getHistory(); // Возвращает историю
 
     Set<Task> getPrioritizedTasks(); // Возвращает отсортированный по startTime список задач
+
+    boolean getIsDeleteTask();
 }
 

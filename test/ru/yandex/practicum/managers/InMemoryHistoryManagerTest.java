@@ -19,10 +19,10 @@ class InMemoryHistoryManagerTest {
     private Epic epic;
     private Subtask subtask1;
 
-
     @BeforeEach
     public void createNewHistoryManager() {
         historyManager = new InMemoryHistoryManager();
+
         task = new Task("Test Task name",
                         "Test Task Description",
                         TaskStatus.NEW,

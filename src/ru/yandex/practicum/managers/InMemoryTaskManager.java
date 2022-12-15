@@ -4,7 +4,9 @@ import ru.yandex.practicum.tasks.Epic;
 import ru.yandex.practicum.tasks.Subtask;
 import ru.yandex.practicum.tasks.Task;
 import ru.yandex.practicum.tasks.enums.TaskStatus;
+import ru.yandex.practicum.utils.Managers;
 
+import java.time.Duration;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -17,6 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Set<Task> prioritizedTask = new HashSet<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory(); // Возвращает новый объект типа HistoryManager.
     private int taskId;
+    private boolean isDeleteTask;
 
     // Присваивает простой задаче Id и добавляет её в Map
     // и возвращает Id простой задачи.
@@ -60,11 +63,17 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setEpicIdForSubtask(epic.getId());
 
         subTasks.put(taskId, subtask);
-        prioritizedTask.add(subtask); // New! Добавление задачи HashSet
+        prioritizedTask.add(subtask); // Добавление задачи HashSet
 
-        calculateEpicTime(epic, subtask); // Расчет времени Эпика, относительно его подзадачи
+        updateEpicWithSubtask(subtask.getId()); // Расчет cтатусов и времени Эпика, относительно его подзадачи
+        // calculateEpicTime(epic, subtask);
 
         return taskId;
+    }
+
+    @Override
+    public boolean getIsDeleteTask() {
+        return isDeleteTask;
     }
 
     @Override
@@ -109,6 +118,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void setPrioritizedTask(Task task) {
         prioritizedTask.add(task);
+    }
+
+    // NEW. Возвращает список всех задач
+    @Override
+    public List<Task> getAllTaskList() {
+        List<Task> allTasks = new ArrayList<>();
+
+        allTasks.addAll(getTasksList());
+        allTasks.addAll(getEpicsList());
+        allTasks.addAll(getSubTasksList());
+
+        return allTasks;
     }
 
     @Override
@@ -174,7 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer epicId : epics.keySet()) {
             historyManager.remove(epicId);
             for (Integer subtaskId : epics.get(epicId).getSubtaskIdForEpic()) {
-                // New! При удалении всех эпиков удаляем все подзадачи
+                // При удалении всех эпиков удаляем все подзадачи
                 // из prioritizedTaskByTime.
                 prioritizedTask.removeIf(task -> task.getId() == subtaskId);
 
@@ -236,6 +257,8 @@ public class InMemoryTaskManager implements TaskManager {
     // Удаление задачи по идентификатору.
     @Override
     public void deleteTaskById(int removeTask) {
+        isDeleteTask = false;
+
         if (tasks.get(removeTask) == null) {
             System.out.println("Простой задачи id " + removeTask + " нет :(");
         } else {
@@ -245,11 +268,14 @@ public class InMemoryTaskManager implements TaskManager {
             tasks.remove(removeTask);
 
             System.out.println("Простая задача id " + removeTask + " удалена.");
+            isDeleteTask = true;
         }
     }
 
     @Override
     public void deleteEpicById(int removeEpic) { // Удаление Епик-задачи по идентификатору. Теперь void.
+        isDeleteTask = false;
+
         if (epics.get(removeEpic) == null) {
             System.out.println("Эпик-задачи id " + removeEpic + " нет :(");
         } else {
@@ -267,12 +293,15 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(removeEpic);
             epics.remove(removeEpic);
             System.out.println("Эпик-задача id " + removeEpic + " удалена.");
+            isDeleteTask = true;
         }
     }
 
     // Удаление подзадачи по идентификатору.
     @Override
     public void deleteSubtaskById(int removeSubtask) {
+        isDeleteTask = false;
+
         if (subTasks.get(removeSubtask) == null) {
             System.out.println("Задачи id " + removeSubtask + " нет :(");
         } else {
@@ -289,6 +318,7 @@ public class InMemoryTaskManager implements TaskManager {
             subTasks.remove(removeSubtask);
 
             System.out.println("Подзадача id " + removeSubtask + " удалена.");
+            isDeleteTask = true;
 
             updateEpicWithSubtask(epicId); // После удаления подзадачи происходит обновление эпика.
         }
@@ -423,12 +453,17 @@ public class InMemoryTaskManager implements TaskManager {
 
         Epic epic = epics.get(epicId);
 
-        // Перед расчетом времени эпика – относительно его подзадач обнуляю его время.
-        // Если этого не сделать, то время Эпика может рассчитаться неправильно.
-        epic.setStartTime(null);
-        epic.setEndTime(null);
+        // ОВБЗ
 
         subtaskIdForEpic = epics.get(epicId).getSubtaskIdForEpic();
+
+        if (!subtaskIdForEpic.isEmpty()) {
+            // Перед расчетом времени эпика – относительно его подзадач обнуляю его время.
+            // Если этого не сделать, то время Эпика может рассчитаться неправильно.
+            epic.setStartTime(null);
+            epic.setDuration(Duration.ZERO);
+            epic.setEndTime(null);
+        }
 
         int checkNew = 0;
         int checkDone = 0;
@@ -438,7 +473,8 @@ public class InMemoryTaskManager implements TaskManager {
             } else if (subTasks.get(subTaskId).getStatus().equals(TaskStatus.DONE)) {
                 checkDone++;
             }
-            calculateEpicTime(epic, subTasks.get(subTaskId)); // New! Расчёт времени Эпика – после апдейта Epic или Subtask.
+
+            calculateEpicTime(epic, subTasks.get(subTaskId)); // Расчёт времени Эпика – после апдейта Epic или Subtask.
         }
 
         if (checkNew == subtaskIdForEpic.size()) {
@@ -450,12 +486,12 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // Mew!!! При создании Subtask, рассчитать startTime и endTime для Эпика.
+    // При создании Subtask, рассчитать startTime и endTime для Эпика.
     private void calculateEpicTime(Epic epic, Subtask subtask) {
         List<Integer> subtaskIdForEpic = epic.getSubtaskIdForEpic();
         boolean isSizeZero = subtaskIdForEpic.isEmpty();
-        // todo
-        boolean isSizeOne = subtaskIdForEpic.size() == 1; // New. Проверка на то, что у Эпика только один Subtask.
+
+        boolean isSizeOne = subtaskIdForEpic.size() == 1; // Проверка на то, что у Эпика только один Subtask.
 
         if (isSizeZero) {
             return;
@@ -464,16 +500,18 @@ public class InMemoryTaskManager implements TaskManager {
         // Если Эпик Null, а Subtask не Null, то присваиваем Эпику время Subtask
         if (epic.getStartTime() == null) {
             if (subtask.getStartTime() != null) {
-                epic.setStartTime(subtask.getStartTime()); //
+                epic.setStartTime(subtask.getStartTime());
+                epic.setDuration(subtask.getDuration());
                 epic.setEndTime(subtask.getEndTime());
             }
             // Если Эпик не Null и Subtask не Null, то сравниваем startTime и endTime
             // Эпика и Subtask. При необходимости переназначаем Время Эпика.
         } else if (subtask.getStartTime() != null) {
-            // todo
-            if (isSizeOne) {                               // New. Если у Эпика это первый Subtask, то его время должно
+
+            if (isSizeOne) {                               // Если у Эпика это первый Subtask, то его время должно
                 epic.setStartTime(subtask.getStartTime()); // быть сразу же назначено Эпику. Иначе время самого Эпика может
-                epic.setEndTime(subtask.getEndTime());     // оказаться раньше и/или позже времени Subtask - и не переназначится.
+                epic.setDuration(subtask.getDuration());   // оказаться раньше и/или позже времени Subtask - и не переназначится.
+                epic.setEndTime(subtask.getEndTime());
             } else {
                 boolean startTime = subtask.getStartTime().isBefore(epic.getStartTime());
                 boolean endTime = subtask.getEndTime().isAfter(epic.getEndTime());
@@ -484,12 +522,10 @@ public class InMemoryTaskManager implements TaskManager {
 
                 if (endTime) {
                     epic.setEndTime(subtask.getEndTime());
-
                 }
             }
         }
     }
-
 
     private void add(Task task) { // Метод, который добавляет просмотренную задачу в лист истории.
         historyManager.add(task);

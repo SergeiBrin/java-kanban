@@ -23,8 +23,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     // main для проверки работы менеджера
     public static void main(String[] args) {
-        Path of = Path.of("resources/backed_file.csv");
-        FileBackedTasksManager taskManager = new FileBackedTasksManager(of);
+
     }
 
     public void save() {
@@ -226,7 +225,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void deleteSubtaskById(int removeSubtask) {
         super.deleteSubtaskById(removeSubtask);
-
         save();
     }
 

@@ -7,10 +7,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task implements Comparable<Task> {
+
+    protected int id;
     protected String taskName;
     protected String taskDescription;
     protected TaskStatus status;
-    protected int id;
     protected LocalDateTime startTime;
     protected Duration duration = Duration.ZERO;
 
@@ -54,8 +55,13 @@ public class Task implements Comparable<Task> {
     }
 
     public LocalDateTime getEndTime() {
-        if (startTime == null || duration == null) {
+//        if (startTime == null || duration == null) {
+//            return null;
+//        }
+        if (startTime == null) {
             return null;
+        } else if (duration == null) {
+            duration = Duration.ZERO;
         }
         return startTime.plus(duration);
     }
