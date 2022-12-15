@@ -13,12 +13,10 @@ import java.util.List;
 
 public class HTTPTaskManager extends FileBackedTasksManager {
     private static final Gson gson = GsonBuilders.getGson();
-    private final String url;
     private static KVTaskClient kvTaskClient;
 
     public HTTPTaskManager(String url) {
         super(null);
-        this.url = url;
         kvTaskClient = new KVTaskClient(url);
     }
 
