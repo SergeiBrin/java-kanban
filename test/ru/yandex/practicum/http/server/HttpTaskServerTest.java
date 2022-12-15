@@ -178,7 +178,7 @@ class HttpTaskServerTest {
         // Отправляем Subtask
         final URI postEpicPath = URI.create(url + "/epic");
         final HttpRequest postRequest = postRequest(jsonEpic, postEpicPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         final URI postSubtask1Path = URI.create(url + "/subtask/epic?id=1");
         final HttpRequest postSubtask1Request = postRequest(jsonSubtask1, postSubtask1Path);
@@ -230,7 +230,7 @@ class HttpTaskServerTest {
         // Отправляем Task
         final URI postTaskPath = URI.create(url + "/task");
         final HttpRequest postRequest = postRequest(jsonTask, postTaskPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Возвращаем Task
         final URI getTaskPath = URI.create(url + "/task?id=1");
@@ -246,7 +246,7 @@ class HttpTaskServerTest {
         // Отправляем epic
         final URI postEpicPath = URI.create(url + "/epic");
         final HttpRequest postRequest = postRequest(jsonEpic, postEpicPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Возвращаем Epic
         final URI getEpicPath = URI.create(url + "/epic?id=1");
@@ -267,7 +267,7 @@ class HttpTaskServerTest {
         // Отправляем Subtask1
         final URI postSubtask1Path = URI.create(url + "/subtask/epic?id=1");
         final HttpRequest postSubtask1Request = postRequest(jsonSubtask1, postSubtask1Path);
-        final HttpResponse<String> postSubtask1Response = httpClient.send(postSubtask1Request, handler);
+        httpClient.send(postSubtask1Request, handler);
 
         // Возвращаем Subtask1
         final URI getSubtask1Path = URI.create(url + "/subtask?id=2");
@@ -283,7 +283,7 @@ class HttpTaskServerTest {
         // Отправляем Task
         final URI postTaskPath = URI.create(url + "/task");
         final HttpRequest postRequest = postRequest(jsonTask, postTaskPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Возвращаем Task
         final URI getTaskPath = URI.create(url + "/task?id=2");
@@ -299,7 +299,7 @@ class HttpTaskServerTest {
         // Отправляем epic
         final URI postEpicPath = URI.create(url + "/epic");
         final HttpRequest postRequest = postRequest(jsonEpic, postEpicPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Возвращаем Epic
         final URI getEpicPath = URI.create(url + "/epic?id=3");
@@ -320,7 +320,7 @@ class HttpTaskServerTest {
         // Отправляем Subtask1
         final URI postSubtask1Path = URI.create(url + "/subtask/epic?id=1");
         final HttpRequest postSubtask1Request = postRequest(jsonSubtask1, postSubtask1Path);
-        final HttpResponse<String> postSubtask1Response = httpClient.send(postSubtask1Request, handler);
+        httpClient.send(postSubtask1Request, handler);
 
         // Возвращаем Subtask1
         final URI getSubtask1Path = URI.create(url + "/subtask?id=5");
@@ -336,7 +336,7 @@ class HttpTaskServerTest {
         // Отправляем Task
         final URI postTaskPath = URI.create(url + "/task");
         final HttpRequest postRequest = postRequest(jsonTask, postTaskPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Удаляем Task
         final URI deleteTaskPath = URI.create(url + "/task?id=1");
@@ -359,7 +359,7 @@ class HttpTaskServerTest {
         // Отправляем Epic
         final URI postEpicPath = URI.create(url + "/epic");
         final HttpRequest postRequest = postRequest(jsonEpic, postEpicPath);
-        final HttpResponse<String> postResponse = httpClient.send(postRequest, handler);
+        httpClient.send(postRequest, handler);
 
         // Удаляем Epic
         final URI deleteEpicPath = URI.create(url + "/epic?id=1");
@@ -646,7 +646,7 @@ class HttpTaskServerTest {
         // Отправляем Subtask2
         final URI postSubtask2Path = URI.create(url + "/subtask/epic?id=1");
         final HttpRequest postSubtask2Request = postRequest(jsonSubtask2, postSubtask2Path);
-        final HttpResponse<String> postSubtask2Response = httpClient.send(postSubtask2Request, handler);
+        httpClient.send(postSubtask2Request, handler);
         final int postSubtask2Code = postSubtask1Response.statusCode();
 
         // Возвращаем Subtask1
