@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-    DateTimeFormatter writeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss.nnnnnnnnn");
 
     // Сократил до секунд, чтобы клиенту было удобней отправлять запрос и получать ответ.
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss.nnnnnnnnn");
