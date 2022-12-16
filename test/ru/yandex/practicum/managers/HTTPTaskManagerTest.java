@@ -26,6 +26,11 @@ class HTTPTaskManagerTest extends TaskManagerTest<HTTPTaskManager> {
         taskManager = new HTTPTaskManager("http://localhost:8078");
     }
 
+    @AfterEach
+    public void stopServer() {
+        kvServer.stop();
+    }
+
     @Test
     public void checkThatEpicWithoutSubtasksIsLoadingCorrectlyFromServer() {
         // Создаю Эпик без подзадачи
@@ -155,10 +160,4 @@ class HTTPTaskManagerTest extends TaskManagerTest<HTTPTaskManager> {
         assertEquals(subtaskStartTime, loadSubtask.getStartTime(), "Время с сервера загружается неправильно");
         assertEquals(subtaskDuration, loadSubtask.getDuration(), "Время с сервера загружается неправильно");
     }
-
-    @AfterEach
-    public void stopServer() {
-        kvServer.stop();
-    }
-
 }

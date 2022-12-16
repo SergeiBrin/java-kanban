@@ -82,6 +82,12 @@ class HttpTaskServerTest {
         jsonSubtask2 = gson.toJson(subtask1);
     }
 
+    @AfterEach
+    public void afterEach() {
+        httpTaskServer.stop();
+        kvServer.stop();
+    }
+
     // Написал методы, чтобы в тестах не писать
     // постоянно эти большие конструкции.
     private HttpRequest getRequest(URI path) {
@@ -852,11 +858,5 @@ class HttpTaskServerTest {
         assertEquals(epic, getEpic);
         assertEquals(updateManagerEpic, getEpic);
         assertEquals(200, getEpicCode);
-    }
-
-    @AfterEach
-    public void afterEach() {
-        httpTaskServer.stop();
-        kvServer.stop();
     }
 }
