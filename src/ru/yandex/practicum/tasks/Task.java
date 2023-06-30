@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task implements Comparable<Task> {
-
     protected int id;
     protected String taskName;
     protected String taskDescription;
@@ -55,9 +54,6 @@ public class Task implements Comparable<Task> {
     }
 
     public LocalDateTime getEndTime() {
-//        if (startTime == null || duration == null) {
-//            return null;
-//        }
         if (startTime == null) {
             return null;
         } else if (duration == null) {
@@ -97,7 +93,6 @@ public class Task implements Comparable<Task> {
         return "Task";
     }
 
-    // New!
     // Если введенное, или загруженное из FileBackedTasksManager.loadFromFile время
     // задачи startTime или endTime уже в прошлом, то метод скажет об этом (это просто инфо).
     // startTime.plusSeconds(10) и endTime.plusSeconds(10) из-за того, что от момента создания задачи,
@@ -127,7 +122,7 @@ public class Task implements Comparable<Task> {
         }
     }
 
-    // new! Метод сортировки. Задачи с null временем тоже должны сортироваться.
+    // Метод сортировки. Задачи с null временем тоже должны сортироваться.
     @Override
     public int compareTo(Task o) {
         if (this.startTime == null) {

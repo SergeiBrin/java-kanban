@@ -71,7 +71,7 @@ public class TaskCsvFormatter {
                     description = values[i];
                     break;
                 case 5:
-                    // New! Если в файле null, то перехват
+                    // Если в файле null, то перехват
                     try {
                         dateTime = LocalDateTime.parse(values[i]);
                     } catch (DateTimeParseException e) {
@@ -79,7 +79,7 @@ public class TaskCsvFormatter {
                     }
                     break;
                 case 6:
-                    // New! Если в файле null, то перехват
+                    // Если в файле null, то перехват
                     try {
                         duration = Duration.parse(values[i]);
                     } catch (DateTimeParseException e) {

@@ -14,7 +14,6 @@ public class Epic extends Task {
     public Epic(String taskName, String taskDescription, TaskStatus status, LocalDateTime startTime, Duration duration) {
         super(taskName, taskDescription, status, startTime, duration);
 
-        // New!
         // Если эпику при создании назначены startTime и duration – посчитать его endTime.
         if (this.getClassName().equals("Epic") && startTime != null && duration != null) {
             endTime = startTime.plus(duration);
@@ -53,7 +52,6 @@ public class Epic extends Task {
         this.endTime = endTime;
     }
 
-    // New!
     // Переопределил из Task setStartTime() и setDuration(), чтобы изменялся
     // endTime у Эпика при изменении его значений. Но, меняться значения будут,
     // только если у Эпика нет подзадач.

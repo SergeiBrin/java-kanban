@@ -41,7 +41,6 @@ public class HTTPTaskManager extends FileBackedTasksManager {
     }
 
     // Этот метод создаст новый менеджер и загрузит данные с сервера.
-    // Как быть с 2-мя менеджерами? Один в сервере, другой нет.
     public static HTTPTaskManager load() {
         HTTPTaskManager httpTaskManager = new HTTPTaskManager("http://localhost:8078");
 
@@ -119,7 +118,6 @@ public class HTTPTaskManager extends FileBackedTasksManager {
                         httpTaskManager.getSubtaskById(taskId);
                     }
                     break;
-
             }
         }
     }

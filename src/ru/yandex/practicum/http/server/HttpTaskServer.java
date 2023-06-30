@@ -20,10 +20,10 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 public class HttpTaskServer {
-    private final static int PORT = 8080;
+    private final static int PORT = 8081;
     private final HttpServer httpServer;
     private URI uri;
-    private TaskManager httpTaskManager; // Тут пока непонятно.
+    private TaskManager httpTaskManager;
     private final Gson gson = GsonBuilders.getGson();
 
     public HttpTaskServer() throws IOException {
@@ -42,7 +42,6 @@ public class HttpTaskServer {
     }
 
     private class TasksHandler implements HttpHandler {
-        // Здесь будет блок try catch
 
         @Override
         public void handle(HttpExchange ex) throws IOException {

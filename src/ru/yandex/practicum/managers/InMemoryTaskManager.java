@@ -508,9 +508,12 @@ public class InMemoryTaskManager implements TaskManager {
             // Эпика и Subtask. При необходимости переназначаем Время Эпика.
         } else if (subtask.getStartTime() != null) {
 
-            if (isSizeOne) {                               // Если у Эпика это первый Subtask, то его время должно
-                epic.setStartTime(subtask.getStartTime()); // быть сразу же назначено Эпику. Иначе время самого Эпика может
-                epic.setDuration(subtask.getDuration());   // оказаться раньше и/или позже времени Subtask - и не переназначится.
+            // Если у Эпика это первый Subtask, то его время должно
+            // быть сразу же назначено Эпику. Иначе время самого Эпика может
+            // оказаться раньше и/или позже времени Subtask - и не переназначится.
+            if (isSizeOne) {
+                epic.setStartTime(subtask.getStartTime());
+                epic.setDuration(subtask.getDuration());
                 epic.setEndTime(subtask.getEndTime());
             } else {
                 boolean startTime = subtask.getStartTime().isBefore(epic.getStartTime());

@@ -33,10 +33,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         List<Subtask> subtasks = getSubTasksList();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(path.toFile()))) {
-            // Если все пусто, то return.
-            // Когда я выношу это условие из try, то программа не чистит файл, когда все мапы пусты.
-            // Это происходит, потому что мапы очищаются в первую очередь, а файл – только после открытия потока.
-            // Как очистить файл, не открывая поток, я чёт не знаю...
             boolean isNoTasks = (tasks.size() == 0) && (epics.size() == 0) && (subtasks.size() == 0);
             if (isNoTasks) {
                 return;

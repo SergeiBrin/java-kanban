@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-
     private final HttpClient client = HttpClient.newHttpClient();
     private final String API_TOKEN;
     private final String url;
@@ -32,7 +31,7 @@ public class KVTaskClient {
         try {
             client.send(postRequest, postHandler);
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e); // Здесь можно сделать проверку на коды.
+            throw new RuntimeException(e);
         }
     }
 
