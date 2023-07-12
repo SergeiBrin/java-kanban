@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HttpTaskServerTest {
     private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final String url = "http://localhost:8080/tasks";
+    private final String url = "http://localhost:8081/tasks";
     private final HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
     private final Gson gson = GsonBuilders.getGson();
 

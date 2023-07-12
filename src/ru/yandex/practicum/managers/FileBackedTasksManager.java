@@ -96,7 +96,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] lines = csvFile.split("\n");
 
         for (int i = 1; i < lines.length; i++) {
-            if (lines[0].isEmpty()) { // Возможно это лишнее.
+            if (lines[0].isEmpty()) {
                 break;
             }
 
@@ -131,13 +131,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                             epics.get(epicIdForSubtask).setSubtasksIdForEpic(subtaskId);
                         }
 
-                        // New! C помощью этого апдейта обновится время Эпика этой подзадачи.
+                        // C помощью этого апдейта обновится время Эпика этой подзадачи.
                         fileBackedTasksManager.updateSubtask((Subtask) task);
                         break;
                 }
             } else {
                 // Получаем id истории. Находим, к какому типу задачи относятся эти id
-                // и отправляем эти id d соответствующие методы get...Id() для дальнейшей обработки.
+                // и отправляем эти id в соответствующие методы get...Id() для дальнейшей обработки.
                 List<Integer> idHistories = TaskCsvFormatter.historyFromString(lines[++i]);
 
                 for (Integer idHistory : idHistories) {
@@ -160,7 +160,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return fileBackedTasksManager;
     }
 
-    // Переопределил только те методы, где есть добавленный функционал.
     @Override
     public Integer createTask(Task task) {
         int taskId = super.createTask(task);

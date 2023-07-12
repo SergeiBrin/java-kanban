@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskCsvFormatter {
-    public static String getFileHeader() { // Метод возвращает заголовок для scv файла.
+
+    // Метод возвращает заголовок для scv файла.
+    public static String getFileHeader() {
         return "id,type,name,status,description,time,duration,epic_id";
     }
 
-    public static String toString(Task task) { // Метод сохранения задачи в строку
+    // Метод сохранения задачи в строку
+    public static String toString(Task task) {
         switch (task.getClassName()) {
             case "Subtask":
                 return String.format("%s,%s,%s,%s,%s,%s,%s,%s", task.getId(), TaskType.SUBTASK, task.getTaskName(),
@@ -34,7 +37,8 @@ public class TaskCsvFormatter {
         }
     }
 
-    public static Task fromString(String value) { // Метод получения задачи из строки.
+    // Метод получения задачи из строки.
+    public static Task fromString(String value) {
         Task task = null;
         String[] values = value.split(",");
 
@@ -112,7 +116,8 @@ public class TaskCsvFormatter {
         return task;
     }
 
-    public static String historyToString(List<Task> manager) { // Сохранение истории.
+    // Сохранение истории.
+    public static String historyToString(List<Task> manager) {
         StringBuilder builder = new StringBuilder();
         int count = 1;
 
@@ -127,7 +132,8 @@ public class TaskCsvFormatter {
         return builder.toString();
     }
 
-    public static List<Integer> historyFromString(String value) { // Восстановление истории.
+    // Восстановление истории.
+    public static List<Integer> historyFromString(String value) {
         List<Integer> idList = new ArrayList<>();
         String[] idHistory = value.split(",");
 

@@ -22,7 +22,6 @@ public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
         }
     }
 
-    // Разобратьcя после с этим исключением. Сделать метод с gson и внедрить туда эти исключения.
     @Override
     public LocalDateTime read(JsonReader jsonReader) throws IOException {
         try {

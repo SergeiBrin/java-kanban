@@ -37,7 +37,6 @@ public class Epic extends Task {
         subtasksIdForEpic.clear();
     }
 
-    // new!
     // Если Subtask, то возвращаем метод getEndTime из Task,
     // иначе возвращаем endTime из класса Epic
     @Override

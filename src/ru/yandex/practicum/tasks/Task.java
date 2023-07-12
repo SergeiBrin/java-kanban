@@ -80,7 +80,7 @@ public class Task implements Comparable<Task> {
         return duration;
     }
 
-    // New! Если передаем duration null, то делаем его Duration.Zero.
+    // Если передаем duration null, то делаем его Duration.Zero.
     public void setDuration(Duration duration) {
         if (this.startTime == null || duration == null) {
             this.duration = Duration.ZERO;

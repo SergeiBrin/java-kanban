@@ -43,13 +43,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         private int size = 0;
 
         public void removeNode(Node<Task> node) {
-            if (node == null) { // Если такого значения нет, то выход из метода.
+            if (node == null) {
                 return;
             }
 
             int id = node.getData().getId();
 
-            if (head.equals(node)) { // В Node переопределил метод equals, чтобы не было ошибок.
+            if (head.equals(node)) {
                 head = node.getNext();
                 if (head != null) {
                     head.setPrev(null);

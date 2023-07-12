@@ -5,16 +5,20 @@ import ru.yandex.practicum.managers.*;
 import java.nio.file.Path;
 
 public class Managers {
-    public static TaskManager getDefault() { // Создание нового объекта HttpTaskManager.
+    // Создание нового объекта HttpTaskManager.
+    public static TaskManager getDefault() {
         return HTTPTaskManager.load();
     }
 
-    public static TaskManager getFileBackedTaskManager() { // Создание нового объекта FileBackedTaskManager.
+    // Создание нового объекта FileBackedTaskManager.
+    public static TaskManager getFileBackedTaskManager() {
         return FileBackedTasksManager.loadFromFile(Path.of("resources/backed_file.csv"));
     }
 
-    public static HistoryManager getDefaultHistory() { // Создание нового объекта типа HistoryManager. Создается автоматически
-        return new InMemoryHistoryManager();           // при создании нового объекта типа InMemoryTaskManager().
+    // Создание нового объекта типа HistoryManager. Создается автоматически
+    // при создании нового объекта типа InMemoryTaskManager().
+    public static HistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
     }
 }
 
